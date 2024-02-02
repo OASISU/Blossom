@@ -1,0 +1,27 @@
+/*
+ * 예제22-2
+ * 디지털 충격센서(D2)에 충격이 감지되면 LED(D3)에
+ * 불이 2초동안 켜지게 만들어라!
+ */
+int sensor = 0;
+void setup() {
+  // put your setup code here, to run once:
+  Serial.begin(9600);
+  pinMode(2,INPUT);
+  pinMode(3,OUTPUT);
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+  sensor = digitalRead(2);
+  //Serial.println(sensor);
+  if(sensor == HIGH){
+    //센서가 작동한것
+    //Serial.println("충격이 감지되었습니다!");
+    digitalWrite(3,HIGH); //볼켜기
+    delay(2000);
+  }else{
+    digitalWrite(3,LOW); //불끄기
+  }
+  delay(100);
+}
