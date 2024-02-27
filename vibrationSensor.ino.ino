@@ -1,14 +1,14 @@
 /*
- * 예제22-2
- * 디지털 충격센서(D2)에 충격이 감지되면 LED(D3)에
- * 불이 2초동안 켜지게 만들어라!
+ * 예제22-1
+ * 디지털 충격센서를 이용해서 충격이 감지되면 시리얼 통신으로
+ * 알려주는 프로그램을 만들어보라!
+ * 충격센서는 디지털 2번핀에 연결해라!
  */
 int sensor = 0;
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(9600);
   pinMode(2,INPUT);
-  pinMode(3,OUTPUT);
 }
 
 void loop() {
@@ -17,11 +17,7 @@ void loop() {
   //Serial.println(sensor);
   if(sensor == HIGH){
     //센서가 작동한것
-    //Serial.println("충격이 감지되었습니다!");
-    digitalWrite(3,HIGH); //볼켜기
-    delay(2000);
-  }else{
-    digitalWrite(3,LOW); //불끄기
+    Serial.println("충격이 감지되었습니다!");
   }
   delay(100);
 }
