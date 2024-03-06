@@ -17,7 +17,7 @@ void loop() {
   //Serial.println(sensor);
   if(sensor == HIGH){
     //센서가 작동한것
-    Serial.println("find vibration");
+    Serial.println("0.0f");
   }
   delay(100);
 }
