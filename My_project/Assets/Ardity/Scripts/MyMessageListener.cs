@@ -23,23 +23,26 @@ public class MyMessageListener : MonoBehaviour
     // Invoked when a line of data is received from the serial device.
     void OnMessageArrived(string msg)
     {
-        // 메시지를 받으면 무조건 StartTime을 0부터 3으로 설정
         if (streamPlayer != null)
         {
             streamPlayer.StartTime = 0.0f;
             streamPlayer.EndTime = 3.0f;
-            streamPlayer.CurrentTime = 0.0f;
 
-            // 각 시간에 대한 업데이트와 로그 출력
-            for (float t = 0.0f; t <= 3.0f; t += 1.0f)
-            {
-                streamPlayer.SetAndPlay(t);
-                Debug.Log("Updated StreamPlayer at time: " + t);
-            }
-
+            // 각 메시지마다 0초에서 3초까지 흐르도록 업데이트합니다.
+            StartCoroutine(UpdateStreamPlayer());
         }
 
         Debug.Log("Arrived: " + msg);
+    }
+
+    IEnumerator UpdateStreamPlayer()
+    {
+        for (float t = 0.0f; t <= 3.0f; t += 1.0f)
+        {
+            streamPlayer.SetAndPlay(t);
+            Debug.Log("Updated StreamPlayer at time: " + t);
+            yield return new WaitForSeconds(1.0f);
+        }
     }
     // Invoked when a connect/disconnect event occurs. The parameter 'success'
     // will be 'true' upon connection, and 'false' upon disconnection or
