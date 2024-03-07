@@ -319,7 +319,15 @@ namespace UnityEngine.Formats.Alembic.Importer
             ClampTime();
             forceUpdate = true;
         }
-
+        public void SetAndPlay(float time)
+        {
+            if (abcStream != null && StreamDescriptor != null)
+            {
+                CurrentTime = time;
+                ClampTime();
+                Update();
+            }
+        }
         internal void Update()
         {
             if (abcStream == null || StreamDescriptor == null)
