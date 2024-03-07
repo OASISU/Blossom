@@ -37,12 +37,22 @@ public class MyMessageListener : MonoBehaviour
 
     IEnumerator UpdateStreamPlayer()
     {
-        for (float t = 0.0f; t <= 3.0f; t += 1.0f)
+        float currentTime = 0.0f;
+        float duration = 3.0f;
+        float updateInterval = 0.1f; // 매 0.1초마다 업데이트
+
+        while (currentTime <= duration)
         {
-            streamPlayer.SetAndPlay(t);
-            Debug.Log("Updated StreamPlayer at time: " + t);
-            yield return new WaitForSeconds(1.0f);
+            streamPlayer.SetAndPlay(currentTime);
+            Debug.Log("Updated StreamPlayer at time: " + currentTime);
+
+            yield return new WaitForSeconds(updateInterval);
+            currentTime += updateInterval;
         }
+
+        // 마지막에 정확히 3.0초에 도달하도록 설정
+        streamPlayer.SetAndPlay(duration);
+        Debug.Log("Updated StreamPlayer at time: " + duration);
     }
     // Invoked when a connect/disconnect event occurs. The parameter 'success'
     // will be 'true' upon connection, and 'false' upon disconnection or
