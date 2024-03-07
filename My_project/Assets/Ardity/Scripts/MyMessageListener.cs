@@ -5,6 +5,7 @@ using UnityEngine.Formats.Alembic.Importer;
 public class MyMessageListener : MonoBehaviour
 {
     public AlembicStreamPlayer streamPlayer;
+    private bool isUpdating = false;
     // Use this for initialization
     void Start()
     {
@@ -23,12 +24,11 @@ public class MyMessageListener : MonoBehaviour
     // Invoked when a line of data is received from the serial device.
     void OnMessageArrived(string msg)
     {
-        if (streamPlayer != null)
+        if (streamPlayer != null && !isUpdating)
         {
             streamPlayer.StartTime = 0.0f;
             streamPlayer.EndTime = 3.0f;
 
-            // 각 메시지마다 0초에서 3초까지 흐르도록 업데이트합니다.
             StartCoroutine(UpdateStreamPlayer());
         }
 
@@ -37,6 +37,8 @@ public class MyMessageListener : MonoBehaviour
 
     IEnumerator UpdateStreamPlayer()
     {
+        isUpdating = true;
+
         float currentTime = 0.0f;
         float duration = 3.0f;
         float updateInterval = 0.1f; // 매 0.1초마다 업데이트
@@ -50,13 +52,11 @@ public class MyMessageListener : MonoBehaviour
             currentTime += updateInterval;
         }
 
-        // 마지막에 정확히 3.0초에 도달하도록 설정
         streamPlayer.SetAndPlay(duration);
         Debug.Log("Updated StreamPlayer at time: " + duration);
+
+        isUpdating = false;
     }
-    // Invoked when a connect/disconnect event occurs. The parameter 'success'
-    // will be 'true' upon connection, and 'false' upon disconnection or
-    // failure to connect.
     void OnConnectionEvent(bool success)
     {
         Debug.Log(success ? "Device connected" : "Device disconnected");
