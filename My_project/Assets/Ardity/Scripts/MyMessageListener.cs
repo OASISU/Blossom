@@ -30,13 +30,12 @@ public class MyMessageListener : MonoBehaviour
             streamPlayer.EndTime = 3.0f;
             streamPlayer.CurrentTime = 0.0f;
 
-            // UpdateImmediately를 호출하여 즉시 업데이트
-            streamPlayer.UpdateImmediately(0.0f);
-            StartCoroutine(DelayedLog(1.0f)); // 1초 후에 DelayedLog 실행
-            streamPlayer.UpdateImmediately(1.0f);
-            StartCoroutine(DelayedLog(1.0f)); // 2초 후에 DelayedLog 실행
-            streamPlayer.UpdateImmediately(2.0f);
-            StartCoroutine(DelayedLog(1.0f)); // 3초 후에 DelayedLog 실행
+            // 각 시간에 대한 업데이트와 로그 출력
+            for (float t = 0.0f; t <= 3.0f; t += 1.0f)
+            {
+                streamPlayer.SetAndPlay(t);
+                Debug.Log("Updated StreamPlayer at time: " + t);
+            }
 
         }
 
