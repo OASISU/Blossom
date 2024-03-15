@@ -6,9 +6,19 @@ public class MyMessageListener : MonoBehaviour
 {
     public AlembicStreamPlayer streamPlayer;
     private bool isUpdating = false;
+
+    // AudioSource 컴포넌트에 대한 참조 추가
+    public AudioSource audioSource;
+
     // Use this for initialization
     void Start()
     {
+
+        // AudioSource 컴포넌트를 자동으로 찾아 할당
+        if (audioSource == null)
+        {
+            audioSource = GetComponent<AudioSource>();
+        }
     }
     // Update is called once per frame
     void Update()
@@ -30,7 +40,15 @@ public class MyMessageListener : MonoBehaviour
             streamPlayer.EndTime = 3.0f;
 
             StartCoroutine(UpdateStreamPlayer());
+
+            // 오디오 재생
+            if (audioSource != null)
+            {
+                audioSource.Play();
+            }
         }
+
+        
 
         Debug.Log("Arrived: " + msg);
     }
