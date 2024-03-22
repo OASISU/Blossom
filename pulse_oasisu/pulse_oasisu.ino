@@ -8,7 +8,13 @@ void setup() {
 
 void loop() {
   pulseValue = analogRead(pulsePin);  // A0 핀에서 아날로그 값 읽기
-  Serial.println(pulseValue);         // 읽은 값 시리얼 모니터에 출력
+  if(pulseValue == 0){
+    Serial.println(pulseValue);
+    delay(5000);             // 5초 동안 대기
+    pulseValue = analogRead(pulsePin);
+    Serial.println(pulseValue);
+  }
+           // 읽은 값 시리얼 모니터에 출력
   
   delay(1000);             // 1초 동안 대기
 }
