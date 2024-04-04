@@ -4,11 +4,38 @@ using UnityEngine;
 
 public class PulseMsgListener : MonoBehaviour
 {
+
     private bool isCollectingData = false;
     private List<int> heartRates = new List<int>();
 
+    private List<Animator> pulseFlowerAnimators = new List<Animator>();
+
+
+    void Start()
+    {
+       
+
+        // "PulseFlower" 오브젝트들의 Animator를 별도로 저장
+        for (int i = 1; i <= 5; i++)
+        {
+            GameObject pulseFlower = GameObject.Find("PulseFlower (" + i + ")");
+            if (pulseFlower != null)
+            {
+                Animator animator = pulseFlower.GetComponent<Animator>();
+                if (animator != null)
+                {
+                    pulseFlowerAnimators.Add(animator);
+                }
+            }
+            SetObjectAndChildrenVisibility("PulseFlower (" + i + ")", false); // 오브젝트를 보이지 않게 설정
+        }
+
+    }
+
+
     public void OnMessageArrived(string msg)
     {
+
         try
         {
             int heartRate = int.Parse(msg);
@@ -19,6 +46,20 @@ public class PulseMsgListener : MonoBehaviour
             }
             else if (heartRate <= 10)
             {
+                // 애니메이션 처음으로 되돌려놓기
+                foreach (Animator animator in pulseFlowerAnimators)
+                {
+                    if (animator != null)
+                    {
+                        animator.SetBool("isPulsed", false);
+                    }
+                }
+                // 모든 PulseFlower 오브젝트 숨기기
+                for (int i = 1; i<=5; i++)
+                {
+                    SetObjectAndChildrenVisibility("PulseFlower (" + i + ")", false); // 오브젝트를 보이지 않게 설정
+                }
+                
                 Debug.Log("평균내기 시작");
                 Debug.Log("Heart Rate: " + heartRate);
                 isCollectingData = true;
@@ -57,58 +98,42 @@ public class PulseMsgListener : MonoBehaviour
 
     void ShowObjectBasedOnAverage(float average)
     {
-        // 모든 오브젝트를 보이지 않게 설정
-        for (int i = 1; i <= 5; i++)
-        {
-            SetObjectAndChildrenVisibility("lily3 (" + i + ")", false);
-        }
+        int index = -1;
+        if (average < 380) index = 0;
+        else if (average >= 380 && average < 385) index = 1;
+        else if (average >= 385 && average < 390) index = 2;
+        else if (average >= 390 && average < 395) index = 3;
+        else if (average >= 395) index = 4;
 
-        // 평균 심박수에 따라 특정 오브젝트를 보이게 설정
-        if (average < 320)
+        if (index != -1 && index < pulseFlowerAnimators.Count)
         {
-            SetObjectAndChildrenVisibility("lily3 (1)", true);
-        }
-        else if (average >= 320 && average < 340)
-        {
-            SetObjectAndChildrenVisibility("lily3 (2)", true);
-        }
-        else if (average >= 340 && average < 360)
-        {
-            SetObjectAndChildrenVisibility("lily3 (3)", true);
-        }
-        else if (average >= 360 && average < 380)
-        {
-            SetObjectAndChildrenVisibility("lily3 (4)", true);
-        }
-        else if (average >= 380)
-        {
-            SetObjectAndChildrenVisibility("lily3 (5)", true);
+            pulseFlowerAnimators[index].SetBool("isPulsed", true);
+            SetObjectAndChildrenVisibility("PulseFlower (" + (index + 1) + ")", true);
+            
         }
     }
 
-    void SetObjectVisibility(string name, bool visible)
-    {
-        GameObject obj = GameObject.Find(name);
-        if (obj != null)
-        {
-            Renderer renderer = obj.GetComponent<Renderer>();
-            if (renderer != null)
-            {
-                renderer.enabled = visible;
-            }
-        }
-    }
 
     public void SetObjectAndChildrenVisibility(string objectName, bool visible)
     {
         GameObject obj = GameObject.Find(objectName);
         if (obj != null)
         {
+            Debug.Log("Found object: " + objectName);
             Renderer[] renderers = obj.GetComponentsInChildren<Renderer>();
             foreach (Renderer renderer in renderers)
             {
                 renderer.enabled = visible;
+                Debug.Log("Setting visibility for: " + renderer.gameObject.name + " to " + visible);
+                Debug.Log(renderer.gameObject.name + "의 enabled" + renderer.enabled);
             }
+
+
+
+        }
+        else
+        {
+            Debug.Log("Could not find object: " + objectName);
         }
     }
 }
