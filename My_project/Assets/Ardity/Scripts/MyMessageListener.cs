@@ -63,14 +63,14 @@ public class MyMessageListener : MonoBehaviour
 
         while (currentTime <= duration)
         {
-            streamPlayer.SetAndPlay(currentTime);
+          //  streamPlayer.SetAndPlay(currentTime);
             Debug.Log("Updated StreamPlayer at time: " + currentTime);
 
             yield return new WaitForSeconds(updateInterval);
             currentTime += updateInterval;
         }
 
-        streamPlayer.SetAndPlay(duration);
+       // streamPlayer.SetAndPlay(duration);
         Debug.Log("Updated StreamPlayer at time: " + duration);
 
         isUpdating = false;
