@@ -109,7 +109,9 @@ public class PulseMsgListener : MonoBehaviour
         {
             pulseFlowerAnimators[index].SetBool("isPulsed", true);
             SetObjectAndChildrenVisibility("PulseFlower (" + (index + 1) + ")", true);
-            delay(3000);
+
+            // 30초 후 오브젝트를 다시 숨기는 코루틴 시작
+            StartCoroutine(HideObjectAfterTime("PulseFlower (" + (index + 1) + ")", 30));
         }
     }
 
@@ -136,4 +138,14 @@ public class PulseMsgListener : MonoBehaviour
             Debug.Log("Could not find object: " + objectName);
         }
     }
+
+    IEnumerator HideObjectAfterTime(string objectName, float delay)
+    {
+        // 지정된 시간만큼 기다립니다.
+        yield return new WaitForSeconds(delay);
+
+        // 지정된 시간이 지난 후 오브젝트를 숨깁니다.
+        SetObjectAndChildrenVisibility(objectName, false);
+    }
+
 }
