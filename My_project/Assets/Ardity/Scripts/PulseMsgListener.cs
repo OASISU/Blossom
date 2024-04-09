@@ -11,9 +11,16 @@ public class PulseMsgListener : MonoBehaviour
     private List<Animator> pulseFlowerAnimators = new List<Animator>();
     private List<Animator> textFlowerAnimators = new List<Animator>();
 
+    public GameObject flower1;
+    public GameObject flower2;
+    public GameObject flower3;
+    public GameObject flower4;
+    public GameObject flower5;
+
+
     void Start()
     {
-       
+
 
         // "PulseFlower" 오브젝트들의 Animator를 별도로 저장
         for (int i = 1; i <= 5; i++)
@@ -27,7 +34,7 @@ public class PulseMsgListener : MonoBehaviour
                     pulseFlowerAnimators.Add(animator);
                 }
             }
-
+            //FlowerText들 ㅊ찾아서 애니메이터 저장
             GameObject flowerText = GameObject.Find("FlowerText (" + i + ")");
             if (flowerText != null)
             {
@@ -37,8 +44,12 @@ public class PulseMsgListener : MonoBehaviour
                     textFlowerAnimators.Add(animator);
                 }
             }
-            SetObjectAndChildrenVisibility("FlowerText (" + i + ")", false); // 오브젝트를 보이지 않게 설정
         }
+        flower1.SetActive(false);
+        flower2.SetActive(false);
+        flower3.SetActive(false);
+        flower4.SetActive(false);
+        flower5.SetActive(false);
 
     }
 
@@ -73,13 +84,17 @@ public class PulseMsgListener : MonoBehaviour
                         animator.SetBool("isPulsed", false);
                     }
                 }
-                // 모든 PulseFlower 오브젝트 숨기기
-                for (int i = 1; i<=5; i++)
+                for(int i = 0; i < 5; i++)
                 {
-                    SetObjectAndChildrenVisibility("PulseFlower (" + i + ")", false); // 꽃 오브젝트를 보이지 않게 설정
-                    SetObjectAndChildrenVisibility("FlowerText (" + i + ")", false); // 텍스트 오브젝트를 보이지 않게 설정
+                    SetObjectAndChildrenVisibility("FlowerText (" + (i) + ")", false);
                 }
+                    flower1.SetActive(false);
+                    flower2.SetActive(false);
+                    flower3.SetActive(false);
+                    flower4.SetActive(false);
+                    flower5.SetActive(false);
                 
+
                 Debug.Log("평균내기 시작");
                 Debug.Log("Heart Rate: " + heartRate);
                 isCollectingData = true;
@@ -119,11 +134,31 @@ public class PulseMsgListener : MonoBehaviour
     void ShowObjectBasedOnAverage(float average)
     {
         int index = -1;
-        if (average < 320) index = 0;
-        else if (average >= 320 && average < 340) index = 1;
-        else if (average >= 340 && average < 360) index = 2;
-        else if (average >= 360 && average < 380) index = 3;
-        else if (average >= 380) index = 4;
+        if (average < 320)
+        {
+            index = 0;
+            flower1.SetActive(true);
+        }
+        else if (average >= 320 && average < 340)
+        {
+            index = 1;
+            flower2.SetActive(true);
+        }
+        else if (average >= 340 && average < 360)
+        {
+            index = 2;
+            flower3.SetActive(true);
+        }
+        else if (average >= 360 && average < 380)
+        {
+            index = 3;
+            flower4.SetActive(true);
+        }
+        else if (average >= 380)
+        {
+            index = 4;
+            flower5.SetActive(true);
+        }
 
         if (index != -1 && index < pulseFlowerAnimators.Count)
         {
