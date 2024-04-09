@@ -9,7 +9,7 @@ public class PulseMsgListener : MonoBehaviour
     private List<int> heartRates = new List<int>();
 
     private List<Animator> pulseFlowerAnimators = new List<Animator>();
-
+    private List<Animator> textFlowerAnimators = new List<Animator>();
 
     void Start()
     {
@@ -27,7 +27,17 @@ public class PulseMsgListener : MonoBehaviour
                     pulseFlowerAnimators.Add(animator);
                 }
             }
-            SetObjectAndChildrenVisibility("PulseFlower (" + i + ")", false); // 오브젝트를 보이지 않게 설정
+
+            GameObject flowerText = GameObject.Find("FlowerText (" + i + ")");
+            if (flowerText != null)
+            {
+                Animator animator = flowerText.GetComponent<Animator>();
+                if (animator != null)
+                {
+                    textFlowerAnimators.Add(animator);
+                }
+            }
+            SetObjectAndChildrenVisibility("FlowerText (" + i + ")", false); // 오브젝트를 보이지 않게 설정
         }
 
     }
@@ -46,8 +56,17 @@ public class PulseMsgListener : MonoBehaviour
             }
             else if (heartRate <= 10)
             {
-                // 애니메이션 처음으로 되돌려놓기
+                // 꽃 애니메이션 처음으로 되돌려놓기
                 foreach (Animator animator in pulseFlowerAnimators)
+                {
+                    if (animator != null)
+                    {
+                        animator.SetBool("isPulsed", false);
+                    }
+                }
+
+                // 텍스트 애니메이션 처음으로 되돌려놓기
+                foreach (Animator animator in textFlowerAnimators)
                 {
                     if (animator != null)
                     {
@@ -57,7 +76,8 @@ public class PulseMsgListener : MonoBehaviour
                 // 모든 PulseFlower 오브젝트 숨기기
                 for (int i = 1; i<=5; i++)
                 {
-                    SetObjectAndChildrenVisibility("PulseFlower (" + i + ")", false); // 오브젝트를 보이지 않게 설정
+                    SetObjectAndChildrenVisibility("PulseFlower (" + i + ")", false); // 꽃 오브젝트를 보이지 않게 설정
+                    SetObjectAndChildrenVisibility("FlowerText (" + i + ")", false); // 텍스트 오브젝트를 보이지 않게 설정
                 }
                 
                 Debug.Log("평균내기 시작");
@@ -108,10 +128,13 @@ public class PulseMsgListener : MonoBehaviour
         if (index != -1 && index < pulseFlowerAnimators.Count)
         {
             pulseFlowerAnimators[index].SetBool("isPulsed", true);
+            textFlowerAnimators[index].SetBool("isPulsed", true);
             SetObjectAndChildrenVisibility("PulseFlower (" + (index + 1) + ")", true);
+            SetObjectAndChildrenVisibility("FlowerText (" + (index + 1) + ")", true);
 
             // 30초 후 오브젝트를 다시 숨기는 코루틴 시작
             StartCoroutine(HideObjectAfterTime("PulseFlower (" + (index + 1) + ")", 30));
+            StartCoroutine(HideObjectAfterTime("FlowerText (" + (index + 1) + ")", 30));
         }
     }
 
