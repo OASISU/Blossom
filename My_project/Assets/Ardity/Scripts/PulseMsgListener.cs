@@ -99,17 +99,17 @@ public class PulseMsgListener : MonoBehaviour
     void ShowObjectBasedOnAverage(float average)
     {
         int index = -1;
-        if (average < 380) index = 0;
-        else if (average >= 380 && average < 385) index = 1;
-        else if (average >= 385 && average < 390) index = 2;
-        else if (average >= 390 && average < 395) index = 3;
-        else if (average >= 395) index = 4;
+        if (average < 320) index = 0;
+        else if (average >= 320 && average < 340) index = 1;
+        else if (average >= 340 && average < 360) index = 2;
+        else if (average >= 360 && average < 380) index = 3;
+        else if (average >= 380) index = 4;
 
         if (index != -1 && index < pulseFlowerAnimators.Count)
         {
             pulseFlowerAnimators[index].SetBool("isPulsed", true);
             SetObjectAndChildrenVisibility("PulseFlower (" + (index + 1) + ")", true);
-            
+            delay(3000);
         }
     }
 
