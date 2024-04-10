@@ -34,7 +34,7 @@ public class PulseMsgListener : MonoBehaviour
                     pulseFlowerAnimators.Add(animator);
                 }
             }
-            //FlowerText들 ㅊ찾아서 애니메이터 저장
+            //FlowerText들 찾아서 애니메이터 저장
             GameObject flowerText = GameObject.Find("FlowerText (" + i + ")");
             if (flowerText != null)
             {
